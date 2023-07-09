@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    padding: 1rem;
+    height: 100vh;
+
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+}
+
+
+header h1 {
+    font-family: "Big Shoulders Stencil Text", cursive, sans-serif;
+    font-size: 5rem;
+    text-align: center;
+    letter-spacing: 1rem;
+}
+
+.field {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.playerField,
+.aiField {
+    height: 22rem;
+    width: 30rem;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.cell {
+    width: 10%;
+    height: 10%;
+    border: 1px solid black;
+}
+
+.cell.ship {
+    background-color: aquamarine;
+}
+
+/****************  place ship screen  ********************/
+
+.placeShips {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    background-color: black;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.placeShips h1 {
+    font-family: cursive, sans-serif;
+    font-size: 5rem;
+    color: white;
+    z-index: 12;
+}
+
+.placeShips.hide {
+    display: none;
+}
+
+.placeShips .cell {
+    border: 1px solid white;
+}
+
+.placeShips .cell.ship {
+    background-color: blue;
+}

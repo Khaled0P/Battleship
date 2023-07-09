@@ -7,7 +7,7 @@ export default function Gameboard() {
 
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-      board.push([i, j]);
+      board.push([j, i]);
     }
   }
   let positionVertically = false;
@@ -46,11 +46,16 @@ export default function Gameboard() {
 
       //position on X or Y axis depending on positionVertically value
       for (let i = 0; i < shipLength; i++) {
-        positionVertically
-          ? ship.shipPosition.push([positionX, positionY + i])
-          : ship.shipPosition.push([positionX + i, positionY]);
+        if (positionVertically) {
+          ship.shipPosition.push([positionX, positionY + i]);
+          if (illegalMove(positionX, positionY + i)) return;
+        } else {
+          ship.shipPosition.push([positionX + i, positionY]);
+          if (illegalMove(positionX + i, positionY)) return;
+        }
       }
       placedShips.push(ship);
+      return ship;
     },
     getShipsPlacement: () => {
       return placedShips;
@@ -77,5 +82,6 @@ export default function Gameboard() {
         return true;
       } else return false;
     },
+    getBoard: () => board,
   };
 }
