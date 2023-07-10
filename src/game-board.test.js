@@ -35,3 +35,8 @@ test("should return 'can't attack same position twice' when coordinates already 
 test('should return "attack not allowed" when coordinates not on board', () => {
   expect(gameboard.receiveAttack(10, 15)).toBe('attack not allowed');
 });
+
+test('should return invalid position when ships intertwine', () => {
+  gameboard.positionShip(5, 0, 0, false);
+  expect(gameboard.invalidPosition(1, 0)).toBeTruthy();
+});

@@ -10,7 +10,20 @@ export default function Gameboard() {
       board.push([j, i]);
     }
   }
-  let positionVertically = false;
+
+  const invalidPosition = (positionX, positionY) => {
+    if (positionX > 9 || positionY > 9 || positionX < 0 || positionY < 0)
+      return true;
+    if (
+      placedShips.some((ship) => {
+        return ship.shipPosition.some(
+          (ele) =>
+            JSON.stringify(ele) === JSON.stringify([positionX, positionY])
+        );
+      })
+    )
+      return true;
+  };
 
   const illegalMove = (positionX, positionY) => {
     // don't allow if coordinates not on gameboard
@@ -40,18 +53,19 @@ export default function Gameboard() {
     return ship.getTimesHit() === ship.getLength();
   };
   return {
+    invalidPosition,
     shotHit,
-    positionShip: (shipLength, positionX, positionY) => {
+    positionShip: (shipLength, positionX, positionY, positionVertically) => {
       const ship = Ship(shipLength);
 
       //position on X or Y axis depending on positionVertically value
       for (let i = 0; i < shipLength; i++) {
         if (positionVertically) {
+          if (invalidPosition(positionX, positionY + i)) return;
           ship.shipPosition.push([positionX, positionY + i]);
-          if (illegalMove(positionX, positionY + i)) return;
         } else {
+          if (invalidPosition(positionX + i, positionY)) return;
           ship.shipPosition.push([positionX + i, positionY]);
-          if (illegalMove(positionX + i, positionY)) return;
         }
       }
       placedShips.push(ship);
@@ -83,5 +97,6 @@ export default function Gameboard() {
       } else return false;
     },
     getBoard: () => board,
+    invalidPosition,
   };
 }
