@@ -52,6 +52,14 @@ export default function Gameboard() {
   const sinkShip = (ship) => {
     return ship.getTimesHit() === ship.getLength();
   };
+  //get the ship that received attack
+  const getTargetShip = (positionX, positionY) => {
+    return placedShips.filter((ship) => {
+      return ship.shipPosition.some((ele) => {
+        return JSON.stringify(ele) === JSON.stringify([positionX, positionY]);
+      });
+    })[0];
+  };
   return {
     invalidPosition,
     shotHit,
@@ -81,22 +89,18 @@ export default function Gameboard() {
       attackedPositions.push([positionX, positionY]);
 
       if (shotHit(positionX, positionY)) {
-        //get the ship that received attack
-        const targetShip = placedShips.filter((ship) => {
-          return ship.shipPosition.filter((ele) => {
-            return (
-              JSON.stringify(ele) === JSON.stringify([positionX, positionY])
-            );
-          });
-        });
-        targetShip[0].isHit();
-        if (sinkShip(targetShip[0])) {
-          return `${targetShip[0]} has sunk`;
-        }
+        getTargetShip(positionX, positionY).isHit();
         return true;
       } else return false;
     },
+    getShipIfSunk: (positionX, positionY) => {
+      const targetShip = getTargetShip(positionX, positionY);
+      if (targetShip.getShipStatus()) {
+        return targetShip;
+      }
+    },
     getBoard: () => board,
     invalidPosition,
+    getTargetShip,
   };
 }

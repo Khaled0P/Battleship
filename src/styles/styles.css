@@ -165,3 +165,64 @@ header h1 {
 .cell.invalid::after {
     transform: rotate(-45deg)
 }
+
+/*********** battle effects  ***************/
+.aiField .cell:hover {
+    cursor: pointer;
+    background-color: rgba(177, 233, 177, .5);
+}
+
+.aiField .cell.hit,
+.aiField .cell.miss {
+    pointer-events: none
+}
+
+.cell.miss {
+    background-color: rgb(177, 233, 177);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell.miss::after {
+    content: "";
+    display: block;
+    background-color: black;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.cell.hit {
+    background-color: rgb(223, 101, 101);
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell.hit::before,
+.cell.hit::after,
+.cell.sunk::before,
+.cell.sunk::after {
+    content: "";
+    position: absolute;
+    background-color: black;
+    width: 1px;
+    height: 8px;
+}
+
+.cell.hit::before {
+    transform: rotate(55deg);
+}
+
+.cell.hit::after {
+    transform: rotate(-55deg);
+}
+
+.cell.sunk::before,
+.cell.sunk::after {
+    width: 2px;
+    height: 155%;
+}
