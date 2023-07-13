@@ -1,6 +1,12 @@
 import './styles/styles.css';
 import Player from './player';
+import hit from './assets/hit.mp3';
+import miss from './assets/miss.mp3';
+import sink from './assets/sink.mp3';
 
+const hitSound = new Audio(hit);
+const missSound = new Audio(miss);
+const sinkSound = new Audio(sink);
 const placeShipsScreen = document.querySelector('.placeShips');
 const field = document.querySelector('.field');
 const playerBoardDom = document.querySelector('.playerField');
@@ -131,10 +137,16 @@ aiBoardDom.childNodes.forEach((cell) => {
       const targetShip = computer.board.getTargetShip(positionX, positionY);
       if (targetShip.getShipStatus()) {
         applyStyleToArr(targetShip.shipPosition, aiBoardDom, 'sunk');
+        sinkSound.currentTime = 0;
+        sinkSound.play();
       }
       cell.classList.add('hit');
+      hitSound.currentTime = 0;
+      hitSound.play();
     } else {
       cell.classList.add('miss');
+      missSound.currentTime = 0;
+      missSound.play();
     }
     playerTurn = false;
 
@@ -160,9 +172,19 @@ function aiAttack() {
       "']"
   );
   if (attackBoard) {
+    const targetShip = player.board.getTargetShip(positionX, positionY);
+    if (targetShip.getShipStatus()) {
+      applyStyleToArr(targetShip.shipPosition, playerBoardDom, 'sunk');
+      sinkSound.currentTime = 0;
+      sinkSound.play();
+    }
     attackTarget.classList.add('hit');
+    hitSound.currentTime = 0;
+    hitSound.play();
   } else {
     attackTarget.classList.add('miss');
+    missSound.currentTime = 0;
+    missSound.play();
   }
   playerTurn = true;
 }
