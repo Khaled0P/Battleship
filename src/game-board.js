@@ -26,11 +26,8 @@ export default function Gameboard() {
   };
 
   const illegalMove = (positionX, positionY) => {
-    // don't allow if coordinates not on gameboard
-    if ((positionX || positionY) > 9 || (positionX || positionY) < 0) {
-      return 'attack not allowed';
-    } else if (
-      //don't allow same move twice
+    //don't allow same move twice
+    if (
       attackedPositions.some(
         (ele) => JSON.stringify(ele) === JSON.stringify([positionX, positionY])
       )

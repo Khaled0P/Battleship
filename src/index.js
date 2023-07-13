@@ -12,6 +12,7 @@ const ships = [5, 4, 3, 3, 2];
 let playerShipCount = 0;
 let aiShipCount = 0;
 let positionVertically = false;
+let playerTurn = true;
 
 rotateShipBtn.onclick = () => {
   positionVertically = !positionVertically;
@@ -124,10 +125,10 @@ while (aiShipCount < 5) {
 aiBoardDom.childNodes.forEach((cell) => {
   cell.addEventListener('click', () => {
     const position = cell.dataset.position;
-    const poseX = parseInt(position[0]);
-    const poseY = parseInt(position[2]);
-    if (computer.board.receiveAttack(poseX, poseY)) {
-      const targetShip = computer.board.getTargetShip(poseX, poseY);
+    const positionX = parseInt(position[0]);
+    const positionY = parseInt(position[2]);
+    if (computer.board.receiveAttack(positionX, positionY)) {
+      const targetShip = computer.board.getTargetShip(positionX, positionY);
       if (targetShip.getShipStatus()) {
         applyStyleToArr(targetShip.shipPosition, aiBoardDom, 'sunk');
       }
@@ -135,5 +136,33 @@ aiBoardDom.childNodes.forEach((cell) => {
     } else {
       cell.classList.add('miss');
     }
+    playerTurn = false;
+
+    setTimeout(() => {
+      while (!playerTurn) {
+        aiAttack();
+      }
+    }, 2000);
   });
 });
+
+function aiAttack() {
+  const positionX = Math.floor(Math.random() * 10);
+  const positionY = Math.floor(Math.random() * 10);
+  const attackBoard = player.board.receiveAttack(positionX, positionY);
+  if (attackBoard === "can't attack same position twice") return;
+
+  const attackTarget = playerBoardDom.querySelector(
+    "[data-position='" +
+      positionX.toString() +
+      ',' +
+      positionY.toString() +
+      "']"
+  );
+  if (attackBoard) {
+    attackTarget.classList.add('hit');
+  } else {
+    attackTarget.classList.add('miss');
+  }
+  playerTurn = true;
+}
