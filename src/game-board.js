@@ -45,10 +45,6 @@ export default function Gameboard() {
     });
   };
 
-  //determine if attacked ship has sunk
-  const sinkShip = (ship) => {
-    return ship.getTimesHit() === ship.getLength();
-  };
   //get the ship that received attack
   const getTargetShip = (positionX, positionY) => {
     return placedShips.filter((ship) => {
@@ -90,11 +86,8 @@ export default function Gameboard() {
         return true;
       } else return false;
     },
-    getShipIfSunk: (positionX, positionY) => {
-      const targetShip = getTargetShip(positionX, positionY);
-      if (targetShip.getShipStatus()) {
-        return targetShip;
-      }
+    allShipsSunk: () => {
+      return placedShips.every((ship) => ship.getShipStatus());
     },
     getBoard: () => board,
     invalidPosition,

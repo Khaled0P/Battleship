@@ -8,6 +8,8 @@ const hitSound = new Audio(hit);
 const missSound = new Audio(miss);
 const sinkSound = new Audio(sink);
 const placeShipsScreen = document.querySelector('.placeShips');
+const gameEndScreen = document.querySelector('.gameEnd');
+const gameEndMsg = document.querySelector('.announceWinner');
 const field = document.querySelector('.field');
 const playerBoardDom = document.querySelector('.playerField');
 const aiBoardDom = document.querySelector('.aiField');
@@ -127,37 +129,30 @@ while (aiShipCount < 5) {
   aiShipCount++;
 }
 
-// attack on ai board
-aiBoardDom.childNodes.forEach((cell) => {
-  cell.addEventListener('click', () => {
-    const position = cell.dataset.position;
-    const positionX = parseInt(position[0]);
-    const positionY = parseInt(position[2]);
-    if (computer.board.receiveAttack(positionX, positionY)) {
-      const targetShip = computer.board.getTargetShip(positionX, positionY);
-      if (targetShip.getShipStatus()) {
-        applyStyleToArr(targetShip.shipPosition, aiBoardDom, 'sunk');
-        sinkSound.currentTime = 0;
-        sinkSound.play();
-      }
-      cell.classList.add('hit');
-      hitSound.currentTime = 0;
-      hitSound.play();
-    } else {
-      cell.classList.add('miss');
-      missSound.currentTime = 0;
-      missSound.play();
+function playerAttack(cell) {
+  const position = cell.dataset.position;
+  const positionX = parseInt(position[0]);
+  const positionY = parseInt(position[2]);
+  if (computer.board.receiveAttack(positionX, positionY)) {
+    const targetShip = computer.board.getTargetShip(positionX, positionY);
+    if (targetShip.getShipStatus()) {
+      applyStyleToArr(targetShip.shipPosition, aiBoardDom, 'sunk');
+      sinkSound.currentTime = 0;
+      sinkSound.play();
     }
-    playerTurn = false;
-
-    setTimeout(() => {
-      while (!playerTurn) {
-        aiAttack();
-      }
-    }, 2000);
-  });
-});
-
+    if (computer.board.allShipsSunk()) {
+      gameEndScreen.style.display = 'block';
+    }
+    cell.classList.add('hit');
+    hitSound.currentTime = 0;
+    hitSound.play();
+  } else {
+    cell.classList.add('miss');
+    missSound.currentTime = 0;
+    missSound.play();
+  }
+  playerTurn = false;
+}
 function aiAttack() {
   const positionX = Math.floor(Math.random() * 10);
   const positionY = Math.floor(Math.random() * 10);
@@ -178,6 +173,10 @@ function aiAttack() {
       sinkSound.currentTime = 0;
       sinkSound.play();
     }
+    if (player.board.allShipsSunk()) {
+      gameEndMsg.textContent = 'You lost :(';
+      gameEndScreen.style.display = 'block';
+    }
     attackTarget.classList.add('hit');
     hitSound.currentTime = 0;
     hitSound.play();
@@ -188,3 +187,18 @@ function aiAttack() {
   }
   playerTurn = true;
 }
+
+function gameLoop() {
+  //allow player to attack
+  aiBoardDom.childNodes.forEach((cell) => {
+    cell.addEventListener('click', function addAttackEvent() {
+      playerAttack(cell);
+      //prevent player attack
+      aiBoardDom.childNodes.forEach((cell) => {
+        cell.removeEventListener('click', addAttackEvent);
+      });
+    });
+  });
+}
+
+gameLoop();
