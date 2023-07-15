@@ -3,12 +3,14 @@ import Player from './player';
 import hit from './assets/hit.mp3';
 import miss from './assets/miss.mp3';
 import sink from './assets/sink.mp3';
+import reloadButton from './reload-button';
 
 const hitSound = new Audio(hit);
 const missSound = new Audio(miss);
 const sinkSound = new Audio(sink);
 const placeShipsScreen = document.querySelector('.placeShips');
 const gameEndScreen = document.querySelector('.gameEnd');
+gameEndScreen.appendChild(reloadButton);
 const gameEndMsg = document.querySelector('.announceWinner');
 const field = document.querySelector('.field');
 const playerBoardDom = document.querySelector('.playerField');
@@ -142,7 +144,7 @@ function playerAttack(cell) {
       sinkSound.play();
     }
     if (computer.board.allShipsSunk()) {
-      gameEndScreen.style.display = 'block';
+      gameEndScreen.style.display = 'flex';
     }
     cell.classList.add('hit');
     hitSound.currentTime = 0;
@@ -176,7 +178,7 @@ function aiAttack() {
     }
     if (player.board.allShipsSunk()) {
       gameEndMsg.textContent = 'you lost, try again!';
-      gameEndScreen.style.display = 'block';
+      gameEndScreen.style.display = 'flex';
     }
     attackTarget.classList.add('hit');
     hitSound.currentTime = 0;
@@ -211,5 +213,3 @@ function gameLoop() {
 }
 
 gameLoop();
-gameEndMsg.textContent = 'you lost, try again!';
-gameEndScreen.style.display = 'block';

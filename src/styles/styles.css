@@ -245,6 +245,10 @@ header h1 {
     left: 0;
     right: 0;
     z-index: 20;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
 }
 
 .announceWinner {
@@ -252,6 +256,36 @@ header h1 {
     color: white;
     font-style: italic;
     font-size: 6rem;
-    text-align: center;
     margin-top: 6rem;
+}
+
+.reload {
+    background-color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Tektur', cursive;
+    white-space: nowrap;
+    font-size: 4rem;
+    width: 25%;
+    min-width: max-content;
+    display: flex;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: transform .3s ease-in-out;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.reload:hover {
+    transform: scale(110%);
+}
+
+.reload img {
+    transition: transform .3s ease-in-out;
+}
+
+.reload:hover img {
+    transform: rotate(160deg);
 }
