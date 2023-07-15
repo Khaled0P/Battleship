@@ -203,6 +203,12 @@ header h1 {
     align-items: center;
 }
 
+.onHold {
+    opacity: 0.5;
+    cursor: auto;
+    pointer-events: none;
+}
+
 .cell.hit::before,
 .cell.hit::after,
 .cell.sunk::before,

@@ -64,6 +64,7 @@ function positionOnClick(cell) {
   if (playerShipCount === 5) {
     setTimeout(() => {
       placeShipsScreen.classList.add('hide');
+      playerBoardDom.classList.add('onHold');
       field.insertBefore(playerBoardDom, aiBoardDom);
     }, 500);
   }
@@ -174,7 +175,7 @@ function aiAttack() {
       sinkSound.play();
     }
     if (player.board.allShipsSunk()) {
-      gameEndMsg.textContent = 'You lost :(';
+      gameEndMsg.textContent;
       gameEndScreen.style.display = 'block';
     }
     attackTarget.classList.add('hit');
@@ -189,14 +190,20 @@ function aiAttack() {
 }
 
 function gameLoop() {
-  //allow player to attack
   aiBoardDom.childNodes.forEach((cell) => {
-    cell.addEventListener('click', function addAttackEvent() {
+    cell.addEventListener('click', () => {
+      //allow player to attack
       playerAttack(cell);
       //prevent player attack
-      aiBoardDom.childNodes.forEach((cell) => {
-        cell.removeEventListener('click', addAttackEvent);
-      });
+      // if (computer.board.allShipsSunk()) return; // prevent extra ai attack after player win
+      aiBoardDom.classList.add('onHold');
+      playerBoardDom.classList.remove('onHold');
+      setTimeout(() => {
+        aiAttack();
+        //reset player ability to attack on each call;
+        playerBoardDom.classList.add('onHold');
+        aiBoardDom.classList.remove('onHold');
+      }, 2000);
     });
   });
 }
