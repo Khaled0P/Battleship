@@ -175,7 +175,7 @@ function aiAttack() {
       sinkSound.play();
     }
     if (player.board.allShipsSunk()) {
-      gameEndMsg.textContent;
+      gameEndMsg.textContent = 'you lost, try again!';
       gameEndScreen.style.display = 'block';
     }
     attackTarget.classList.add('hit');
@@ -195,11 +195,13 @@ function gameLoop() {
       //allow player to attack
       playerAttack(cell);
       //prevent player attack
-      // if (computer.board.allShipsSunk()) return; // prevent extra ai attack after player win
+      if (computer.board.allShipsSunk()) return; // prevent extra ai attack after player win
       aiBoardDom.classList.add('onHold');
       playerBoardDom.classList.remove('onHold');
       setTimeout(() => {
-        aiAttack();
+        while (!playerTurn) {
+          aiAttack();
+        }
         //reset player ability to attack on each call;
         playerBoardDom.classList.add('onHold');
         aiBoardDom.classList.remove('onHold');
@@ -209,3 +211,5 @@ function gameLoop() {
 }
 
 gameLoop();
+gameEndMsg.textContent = 'you lost, try again!';
+gameEndScreen.style.display = 'block';
